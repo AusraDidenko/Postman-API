@@ -1,0 +1,387 @@
+{
+	"id": "a95d3b21-f105-4016-81e9-06090c9d41c8",
+	"name": "Test",
+	"description": "",
+	"auth": null,
+	"events": null,
+	"variables": [],
+	"order": [
+		"a63b7279-a7e7-4404-ae0b-63e11d2a2a12",
+		"80ed31b2-d4dd-4462-bb36-18df474acbca",
+		"c335ab19-bb73-4d5f-9403-aff5d08b0f25",
+		"4675b881-61dc-41ea-9db5-98967cdbd261",
+		"7bfc7853-2730-4d9d-a2cf-d321602f0320",
+		"8d46dbd4-fe0d-4fc6-ae73-90c29360491e"
+	],
+	"folders_order": [],
+	"protocolProfileBehavior": {},
+	"folders": [],
+	"requests": [
+		{
+			"id": "4675b881-61dc-41ea-9db5-98967cdbd261",
+			"name": "Delete comment",
+			"url": "https://gorest.co.in/public-api/comments/{{comment_id}}",
+			"description": "",
+			"data": null,
+			"dataOptions": null,
+			"dataMode": null,
+			"headerData": null,
+			"method": "DELETE",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": {
+				"oauth2": [
+					{
+						"key": "addTokenTo",
+						"value": "header"
+					},
+					{
+						"key": "accessToken",
+						"value": " IfPNaXmvvq92kn2y9uR1rWolqDtohED__W5i"
+					}
+				],
+				"type": "oauth2"
+			},
+			"events": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "88b9ff74-bce9-47e7-ae77-9e2e2927d98f",
+						"exec": [
+							"pm.test(\"Response time is less than 800ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(800);",
+							"});",
+							"",
+							"pm.test(\"Check response is success\", function () {",
+							"   pm.expect(pm.response.text()).to.include('\"success\":true');",
+							"});",
+							"",
+							"pm.test(\"Comment deleted successfully\", function () {",
+							"    pm.expect(pm.response.text()).to.include('\"code\":204');",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"folder": null,
+			"pathVariables": {}
+		},
+		{
+			"id": "7bfc7853-2730-4d9d-a2cf-d321602f0320",
+			"name": "Delete post",
+			"url": "https://gorest.co.in/public-api/posts/{{post_id}}",
+			"description": "",
+			"data": null,
+			"dataOptions": null,
+			"dataMode": null,
+			"headerData": null,
+			"method": "DELETE",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": {
+				"type": "oauth2",
+				"oauth2": [
+					{
+						"key": "addTokenTo",
+						"value": "header"
+					},
+					{
+						"key": "accessToken",
+						"value": " IfPNaXmvvq92kn2y9uR1rWolqDtohED__W5i"
+					}
+				]
+			},
+			"events": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "88b9ff74-bce9-47e7-ae77-9e2e2927d98f",
+						"exec": [
+							"pm.test(\"Response time is less than 800ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(800);",
+							"});",
+							"",
+							"pm.test(\"Check response is success\", function () {",
+							"   pm.expect(pm.response.text()).to.include('\"success\":true');",
+							"});",
+							"pm.test(\"Post deleted successfully\", function () {",
+							"    pm.expect(pm.response.text()).to.include('\"code\":204');",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"folder": null,
+			"pathVariables": {}
+		},
+		{
+			"id": "80ed31b2-d4dd-4462-bb36-18df474acbca",
+			"name": "Create post",
+			"url": "https://gorest.co.in/public-api/posts",
+			"description": null,
+			"data": [],
+			"dataOptions": {
+				"raw": {
+					"language": "json"
+				}
+			},
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"name": "Content-Type",
+					"value": "application/json",
+					"type": "text"
+				}
+			],
+			"method": "POST",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": {
+				"type": "oauth2",
+				"oauth2": [
+					{
+						"key": "accessToken",
+						"value": "{{token}}"
+					},
+					{
+						"key": "addTokenTo",
+						"value": "header"
+					}
+				]
+			},
+			"events": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8ae70c44-49f9-4c05-a8a2-d9527ac59c53",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Check response is success and get post id\", function () {",
+							"    pm.expect(pm.response.text()).to.include('\"success\":true');",
+							"    var jsonData = pm.response.json();",
+							"    pm.globals.set(\"post_id\", jsonData.result.id); ",
+							"});",
+							"",
+							"pm.test(\"Post title equal\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.result.title).to.eql('Posto pavadinimas');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "046f2241-68b1-4ac7-8edb-2ce5336c76d7",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"folder": null,
+			"rawModeData": "{\r\n          \"user_id\": \"{{userid}}\",\r\n          \"title\": \"Posto pavadinimas\",\r\n          \"body\": \"tekstas tekstas tekstas tekstas\"\r\n    }",
+			"headers": "Content-Type: application/json\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "8d46dbd4-fe0d-4fc6-ae73-90c29360491e",
+			"name": "Delete user",
+			"url": "https://gorest.co.in/public-api/users/{{userid}}",
+			"description": "",
+			"data": null,
+			"dataOptions": null,
+			"dataMode": null,
+			"headerData": null,
+			"method": "DELETE",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": {
+				"oauth2": [
+					{
+						"key": "addTokenTo",
+						"value": "header"
+					},
+					{
+						"key": "accessToken",
+						"value": " IfPNaXmvvq92kn2y9uR1rWolqDtohED__W5i"
+					}
+				],
+				"type": "oauth2"
+			},
+			"events": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "88b9ff74-bce9-47e7-ae77-9e2e2927d98f",
+						"exec": [
+							"pm.test(\"Response time is less than 800ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(800);",
+							"});",
+							"",
+							"pm.test(\"User deleted successfully\", function () {",
+							"    pm.expect(pm.response.text()).to.include('\"code\":204');",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"folder": null,
+			"pathVariables": {}
+		},
+		{
+			"id": "a63b7279-a7e7-4404-ae0b-63e11d2a2a12",
+			"name": "Create user",
+			"url": "https://gorest.co.in/public-api/users",
+			"description": "",
+			"data": [],
+			"dataOptions": {
+				"raw": {
+					"language": "json"
+				}
+			},
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"name": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"type": "text"
+				}
+			],
+			"method": "POST",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}"
+					}
+				]
+			},
+			"events": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "61301595-9d81-46e5-b587-f3d0d0a5be99",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Check response is success and get userid\", function () {",
+							"    pm.expect(pm.response.text()).to.include('\"success\":true');",
+							"    var jsonData = pm.response.json();",
+							"        pm.globals.set(\"userid\", jsonData.result.id);",
+							"        pm.globals.set(\"email\", jsonData.result.email);",
+							"        pm.globals.set(\"first_name\", jsonData.result.first_name);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "691af3dd-65bb-47ce-9fd7-c331302b6b40",
+						"exec": [
+							"pm.test(\"Create token value\", function () {",
+							"    pm.environment.set(\"token\", \"IfPNaXmvvq92kn2y9uR1rWolqDtohED__W5i\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"folder": null,
+			"rawModeData": "{\r\n            \"first_name\": \"Naujas\",\r\n            \"last_name\": \"Useris\",\r\n            \"gender\": \"female\",\r\n            \"dob\": \"2000-06-04\",\r\n            \"email\": \"useremail@email.lt\",\r\n            \"phone\": \"1-626-312-2603 x176\",\r\n            \"website\": \"http://www.breitenberg.net/\",\r\n            \"address\": \"adresas 24\",\r\n            \"status\": \"active\"\r\n        }",
+			"headers": "Content-Type: application/json\n",
+			"pathVariables": {}
+		},
+		{
+			"id": "c335ab19-bb73-4d5f-9403-aff5d08b0f25",
+			"name": "Create comment",
+			"url": "https://gorest.co.in/public-api/comments",
+			"description": null,
+			"data": [],
+			"dataOptions": {
+				"raw": {
+					"language": "json"
+				}
+			},
+			"dataMode": "raw",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"name": "Content-Type",
+					"type": "text",
+					"value": "application/json"
+				}
+			],
+			"method": "POST",
+			"pathVariableData": [],
+			"queryParams": [],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{token}}"
+					}
+				]
+			},
+			"events": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8ae70c44-49f9-4c05-a8a2-d9527ac59c53",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Check response is success and get comment id\", function () {",
+							"    pm.expect(pm.response.text()).to.include('\"success\":true');",
+							"    var jsonData = pm.response.json();",
+							"    pm.globals.set(\"comment_id\", jsonData.result.id); ",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "046f2241-68b1-4ac7-8edb-2ce5336c76d7",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"folder": null,
+			"rawModeData": "{\r\n          \"user_id\": \"{{userid}}\",\r\n          \"post_id\": \"{{post_id}}\",\r\n          \"name\": \"{{first_name}}\", \r\n          \"email\": \"{{email}}\", \r\n          \"body\": \"Komentaro tekstas komentaro tekstas\"\r\n    }",
+			"headers": "Content-Type: application/json\n",
+			"pathVariables": {}
+		}
+	]
+}
